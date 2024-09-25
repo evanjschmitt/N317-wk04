@@ -1,5 +1,4 @@
 "use client";
-
 import pokeStyles from "./pokemon.module.css";
 import { useEffect, useState } from "react";
 
@@ -15,60 +14,78 @@ import { useEffect, useState } from "react";
  */
 
 export default function Pokemon() {
+  const [pokemon, setPokemon] = useState({ sprites: {} });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [pokemonEnounters, setPokemonEncounters] = useState([])
   useEffect(function () {
     if (pokemon.id) {
-      fetch("https://pokeapi.co/api/v2/pokemon/${pokemon.id}/encounters")
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}/encounters`)
         .then((rawData) => {
           return rawData.json();
         })
         .then((pokeEncounters) => {
-          console.log(pokeEncounters);
+        //   console.log(pokeEncounters);
+          setPokemonEncounters(pokeEncounters);
         })
         .catch((e) => {
-          console.warn(e);
+          setPokemonEncounters([]);
         });
+    } else {
+        setPokemonEncounters([]);
     }
-  });
+  },[pokemon]);
+  console.count("viewed page");
 
   /**
    * @type {[pokemonApiObject, Function]}
    */
-  const [pokemon, setPokemon] = useState({ sprites: {} });
+
   /**
    * @type {[String, Function]}
    */
-  const [searchTerm, setSearchTerm] = useState("");
 
   function changeSearchTerm(e) {
     setSearchTerm(e.currentTarget.value.toLowerCase());
+  }
 
-    async function searchForPokemonByName() {
-      try {
-        const rawData = await fetch(
-          `https://pokeapi.co/api/v2/pokemon/${searchTerm}`
-        );
-        const pokeDataFormatted = await rawData.json();
-        setPokemon(pokeDataFormatted);
-        console.log(pokeDataFormatted);
-      } catch (error) {
-        console.error("Error fetching Pokemon:", error);
-        setPokemon({ name: searchTerm, sprites: {} });
-      }
+  async function searchForPokemonByName() {
+    try {
+      const rawData = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${searchTerm}`
+      );
+      const pokeDataFormatted = await rawData.json();
+      setPokemon(pokeDataFormatted);
+      console.log(pokeDataFormatted);
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      setPokemon({ name: searchTerm, sprites: {} });
     }
+  }
 
-    return (
-        <main>
+  return (
+    <main>
+      <div className={pokeStyles.wholePage}>
         <h1>Pokemon Page</h1>
         <div className={pokeStyles.search}>
-           <input type="search" id="search" name="search" value={searchTerm} onChange={changeSearchTerm}></input>
-           <input name="search"type="button" value="search" onClick={searchPokemonName}></input>
-           </div>
-           <h3>
-               {pokemon.name}
-           </h3>
-           <img src={pokemon.sprites.front_default}/>
-        
-   </main>
-    );
-  }
+          <input
+            type="search"
+            id="search"
+            name="search"
+            value={searchTerm}
+            onChange={changeSearchTerm}
+          />
+          <input
+            name="search"
+            type="button"
+            value="search"
+            onClick={searchForPokemonByName}
+          />
+        </div>
+        <div className={pokeStyles.results}>
+          <h3>{pokemon.name}</h3>
+          <img src={pokemon.sprites.front_default} />
+        </div>
+      </div>
+    </main>
+  );
 }

@@ -10,19 +10,7 @@ export default function Home() {
     setScore(score + 1);
   }
 
-  // Define a function to fetch Pokemon data
-  function fetchPokemonData() {
-    if (pokemon.id) {
-      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}/encounters`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Encounter data:", data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }
-  }
+
 
  
   return (

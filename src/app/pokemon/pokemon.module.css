@@ -1,3 +1,9 @@
+.wholePage {
+    margin: 0 auto;
+    align-self: center;
+}
+
+
 .search input {
     width: 200px;
     height: 50px;
@@ -7,4 +13,8 @@
 
 .search input[name="search"] {
     width: 400px;
+}
+
+.results {
+    margin: 0 auto;
 }
