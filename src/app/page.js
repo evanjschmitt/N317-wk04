@@ -24,10 +24,7 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    fetchPokemonData();
-  }, [pokemon.id]); // Run the effect whenever the pokemon id changes
-
+ 
   return (
     <main>
       <h1>Home</h1>

@@ -1,7 +1,7 @@
 "use client";
 
 import pokeStyles from "./pokemon.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //Pokemon data
 /**
@@ -15,6 +15,21 @@ import { useState } from "react";
  */
 
 export default function Pokemon() {
+  useEffect(function () {
+    if (pokemon.id) {
+      fetch("https://pokeapi.co/api/v2/pokemon/${pokemon.id}/encounters")
+        .then((rawData) => {
+          return rawData.json();
+        })
+        .then((pokeEncounters) => {
+          console.log(pokeEncounters);
+        })
+        .catch((e) => {
+          console.warn(e);
+        });
+    }
+  });
+
   /**
    * @type {[pokemonApiObject, Function]}
    */
@@ -42,27 +57,18 @@ export default function Pokemon() {
     }
 
     return (
-      <main>
+        <main>
         <h1>Pokemon Page</h1>
         <div className={pokeStyles.search}>
-          <input
-            type="search"
-            id="search"
-            name="search"
-            value={searchTerm}
-            onChange={changeSearchTerm} // No parentheses; you're passing a function reference
-          />
-          <input
-            type="button"
-            value="Search"
-            onClick={searchForPokemonByName} // No parentheses here as well
-          />
-        </div>
-        <h3>{pokemon.name}</h3>
-        {pokemon.sprites?.front_default && (
-          <img src={pokemon.sprites?.front_default} alt={pokemon.name} />
-        )}
-      </main>
+           <input type="search" id="search" name="search" value={searchTerm} onChange={changeSearchTerm}></input>
+           <input name="search"type="button" value="search" onClick={searchPokemonName}></input>
+           </div>
+           <h3>
+               {pokemon.name}
+           </h3>
+           <img src={pokemon.sprites.front_default}/>
+        
+   </main>
     );
   }
 }
